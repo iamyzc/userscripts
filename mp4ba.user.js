@@ -7,6 +7,7 @@
 // @grant         GM_addStyle
 // @include       http://www.mp4ba.com/show.php?*
 // @include       http://www.2tu.cc/Html/*
+// @include       http://www.cnscg.org/*
 // @exclude       http://diveintogreasemonkey.org/*
 // @exclude       http://www.diveintogreasemonkey.org/*
 // ==/UserScript==
@@ -46,6 +47,7 @@ function addStyle(css) {
 
 var mpba = "www.mp4ba.com";
 var tucc = "www.2tu.cc";
+var cnscg = "www.cnscg.org";
 
 var dbapi = "http://api.douban.com/v2/movie/search?q=";
 
@@ -93,4 +95,31 @@ if (href==tucc) {
     newElement.innerHTML = '<span>豆瓣：</span><a target="_blank" href="'+url+'">豆瓣详情 '+average+'分</a>';
     filmStar.parentNode.insertBefore(newElement, filmStar);
     });
+};
+
+if (href==cnscg) {
+    console.log("圣城家园");
+    var title = document.title;
+    console.log(title);
+    var arr = new Array();
+    arr = title.split("]");
+    name = arr[0].replace("[","");
+    console.log(name);
+    var fullurl = dbapi + name;
+    console.log(fullurl);
+        console.log(fullurl);
+    xhr(fullurl, function (url, average) {
+        console.log(url);
+        console.log(average);
+        var target, newElement;
+        target = document.getElementById('magnet').parentNode;
+        newElement = document.createElement('p');
+        newElement.className = 'douban';
+        newElement.innerHTML = '<img src="http://img3.douban.com/favicon.ico"/><a target="_blank" href="'+url+'">豆瓣详情 '+average+'分</a>';
+        target.parentNode.insertBefore(newElement,target.nextSibling);
+    });
+
+     addStyle('.douban a{margin-left: 6px;font-size:13px;text-decoration:underline;}.douban img{line-height:16px;margin-bottom: -4px;}');
+
+
 };
