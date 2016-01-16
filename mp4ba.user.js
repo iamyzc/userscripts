@@ -72,7 +72,7 @@ if (href==mpba) {
         target.parentNode.insertBefore(newElement,target.nextSibling);
     });
 
-     addStyle('.douban a{margin-left: 6px;font-size:13px;text-decoration:underline;}.douban img{line-height:16px;margin-bottom: -4px;}');
+     addStyle('.douban a{margin-left: 6px;font-size:13px;text-decoration:underline;}.douban img{line-height:16px;margin-bottom: -4px;width:16px;}');
 };
 
 
