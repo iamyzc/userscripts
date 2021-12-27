@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         抖店-多功能脚本
-// @version      0.2
+// @version      0.3
 // @description  一键复制订单信息，批量显示隐藏信息，一键下载订单
 // @author       羊种草 706597125@qq.com
 // @match        https://fxg.jinritemai.com/ffa/morder/order/list
@@ -45,6 +45,7 @@ function extractOrderDiv(div) {
   if (spanList.length >= 1) {
     // console.log(spanList[0].innerText)
     resp.orderId = spanList[0].innerText.match(/订单号\s*(\d+)/)[1]
+    resp.extOrderId = '`'+spanList[0].innerText.match(/订单号\s*(\d+)/)[1]
   }
   if (spanList.length >= 2) {
     // console.log(spanList[1].innerText)
@@ -84,14 +85,14 @@ function extractOrderDiv(div) {
 async function downloadCurrentPage() {
   let divList = document.querySelectorAll('div.auxo-spin-container > div:nth-of-type(2) > div > div[data-kora_order_status]')
   let dataList = []
-  let headers = ['orderId', 'orderTime', 'sourceType', 'title', 'sku', 'unitPrice', 'number', 'payAmount', 'nickname', 'contactName', 'contactPhone', 'contactAddress', 'contact', 'status', 'image']
+  let headers = ['extOrderId', 'orderTime', 'sourceType', 'title', 'sku', 'unitPrice', 'number', 'payAmount', 'nickname', 'contactName', 'contactPhone', 'contactAddress', 'contact', 'status', 'image']
   for (let div of divList) {
     let data = extractOrderDiv(div)
-    console.log(data)
+    //console.log(data)
     dataList.push(data)
   }
   const csvString = toCsvString(headers, dataList)
-  console.log('csvString', csvString)
+  //console.log('csvString', csvString)
 
   let shopName = await getShopName()
 
@@ -118,7 +119,6 @@ async function addDownloadButton() {
   div.appendChild(btn)
 
   btn.onclick = (e) => {
-    console.log('btn.onclick', e)
     downloadCurrentPage()
   }
 
@@ -186,6 +186,7 @@ function showUserAddress () {
 }
 
 function copyOrderInfo (divid) {
+    console.log('复制订单信息')
     let div = document.getElementById(divid);
     let data = extractOrderDiv(div)
     //console.log(data)
@@ -196,7 +197,6 @@ function copyOrderInfo (divid) {
     }else {
         showToast('复制失败!')
     }
-    console.log('复制信息',c, copyInfo)
 }
 
 function copyMgr(data) {
